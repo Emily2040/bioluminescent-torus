@@ -1,0 +1,14 @@
+{
+  "name": "bioluminescent-torus",
+  "version": "1.0.0",
+  "description": "Real-time WebGL2 & GLSL 300 es simulation of 1,000,000 golden dust particles and 262,144 bioluminescent Villarceau fiber-optic ribbon segments coalescing into a 3D geometric torus with physical macro bokeh depth of field.",
+  "type": "module",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "node serve.mjs",
+    "verify": "node verify_gates.mjs",
+    "render-video": "node render_showcase_video.mjs"
+  },
+  "author": "Emily2040",
+  "license": "MIT"
+}

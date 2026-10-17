@@ -1,0 +1,80 @@
+{
+  "allPassed": true,
+  "gateResults": [
+    {
+      "id": "G1_ZERO_CONSOLE_AND_SHADER_ERRORS",
+      "passed": true,
+      "measured": {
+        "consoleErrors": [],
+        "pageErrors": [],
+        "deprecationWarnings": [],
+        "shaderErrors": []
+      },
+      "expected": "0 console.error, 0 pageerror, 0 deprecation warnings, and 0 WebGL shader errors"
+    },
+    {
+      "id": "G2_PARTICLE_AND_STRAND_SCALE",
+      "passed": true,
+      "measured": {
+        "webgl2Active": true,
+        "floatFboActive": true,
+        "goldenDustCount": 1000000,
+        "fiberStrandCount": 2048,
+        "fiberSegmentCount": 262144
+      },
+      "expected": "webgl2Active=true, goldenDustCount === 1000000, fiberSegmentCount >= 250000"
+    },
+    {
+      "id": "G3_COALESCENCE_MORPHOGENESIS",
+      "passed": true,
+      "measured": {
+        "voidCoalescence": 0.04,
+        "resonanceCoalescence": 1,
+        "voidRingToOuterRatio": 1.586,
+        "resonanceRingToOuterRatio": 3.682,
+        "concentrationLift": 2.322
+      },
+      "expected": "voidCoalescence < 0.12, resonanceCoalescence > 0.92, and ringToOuterRatio lift > 1.35x"
+    },
+    {
+      "id": "G4_SPECTRAL_SIGNATURE",
+      "passed": true,
+      "measured": {
+        "cornerDarkVoidMean": 5.68,
+        "electricBluePixels": 48756,
+        "magentaPixels": 46263,
+        "goldenDustPixels": 11674
+      },
+      "expected": "cornerDarkVoidMean < 18.0, electricBluePixels >= 400, magentaPixels >= 300, goldenDustPixels >= 400"
+    },
+    {
+      "id": "G5_MACRO_BOKEH_DOF_RESPONSE",
+      "passed": true,
+      "measured": {
+        "f16SharpSpreadPixels": 133,
+        "f1_2MacroBokehSpreadPixels": 21913,
+        "expansionRatio": 164.759
+      },
+      "expected": "f/1.2 bokehSpreadPixels > 1.15x f/16.0 bokehSpreadPixels"
+    },
+    {
+      "id": "G6_SLOW_MOTION_DETERMINISM",
+      "passed": true,
+      "measured": {
+        "slowMoDeltaSimTime": 0.02,
+        "normalDeltaSimTime": 0.2,
+        "speedRatio": 0.1
+      },
+      "expected": "speedRatio in [0.095, 0.105] for 0.10x vs 1.00x slow-motion step"
+    },
+    {
+      "id": "G7_SELFTEST_CAN_FAIL",
+      "passed": true,
+      "measured": {
+        "caughtSyntheticG1Failure": true,
+        "caughtSyntheticG2Failure": true
+      },
+      "expected": "Gate evaluator rejects synthetic broken console and particle count inputs"
+    }
+  ]
+}

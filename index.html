@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bioluminescent Fiber-Optic Torus — Macro Bokeh WebGL2</title>
+  <link rel="icon" href="data:," />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <main id="viewport-container">
+    <canvas id="gl-canvas" aria-label="3D bioluminescent fiber-optic torus and golden dust simulation"></canvas>
+
+    <!-- Optical Click-to-Focus Reticle -->
+    <div id="focus-reticle" class="focus-reticle hidden" aria-hidden="true">
+      <span class="reticle-ring"></span>
+      <span id="reticle-label" class="reticle-label">4.20m</span>
+    </div>
+
+    <!-- Floating Restore Button when HUD is hidden -->
+    <button
+      id="hud-restore-btn"
+      class="hud-restore-btn hidden"
+      type="button"
+      title="Show Director HUD (Shortcut: H)"
+      aria-label="Show Director HUD"
+    >
+      <span class="status-dot"></span>
+      <span>SHOW DIRECTOR HUD (H)</span>
+    </button>
+
+    <!-- Collapsible Director HUD -->
+    <aside id="director-hud" class="director-hud" aria-label="Director Controls">
+      <header class="hud-header">
+        <div class="hud-brand">
+          <div class="hud-eyebrow">
+            <span class="pulse-indicator"></span>
+            <span>OPTICAL FIELD INSTRUMENT // WEBGL2 RGBA16F</span>
+          </div>
+          <h1 class="hud-title">Bioluminescent Villarceau Torus</h1>
+        </div>
+
+        <div class="hud-telemetry" id="hud-telemetry-badges">
+          <span class="telemetry-pill" id="badge-particles">1,000,000 DUST</span>
+          <span class="telemetry-pill" id="badge-fibers">262,144 FIBERS</span>
+          <span class="telemetry-pill" id="badge-coalescence">COALESCENCE 0%</span>
+        </div>
+
+        <div class="hud-actions">
+          <button
+            id="audio-toggle-btn"
+            class="action-btn"
+            type="button"
+            aria-pressed="false"
+            title="Toggle Harmonic Web Audio Synth (Shortcut: M)"
+          >
+            <span class="btn-dot" id="audio-dot"></span>
+            <span id="audio-btn-text">HARMONIC SYNTH: OFF</span>
+          </button>
+          <button
+            id="hud-hide-btn"
+            class="action-btn icon-btn"
+            type="button"
+            title="Hide HUD for Clean Full-Screen View (Shortcut: H)"
+          >
+            HIDE HUD (H)
+          </button>
+        </div>
+      </header>
+
+      <!-- Choreography Timeline & Phase Pills -->
+      <section class="hud-section timeline-section" aria-label="Choreography Timeline">
+        <div class="phase-bar" role="tablist" aria-label="Choreography Phases">
+          <button type="button" class="phase-pill" data-phase="0" data-target="0.06">
+            <span class="phase-index">01</span>
+            <span class="phase-name">Void Swirl</span>
+          </button>
+          <button type="button" class="phase-pill" data-phase="1" data-target="0.24">
+            <span class="phase-index">02</span>
+            <span class="phase-name">Magnetic Capture</span>
+          </button>
+          <button type="button" class="phase-pill" data-phase="2" data-target="0.44">
+            <span class="phase-index">03</span>
+            <span class="phase-name">Villarceau Weave</span>
+          </button>
+          <button type="button" class="phase-pill active" data-phase="3" data-target="0.64">
+            <span class="phase-index">04</span>
+            <span class="phase-name">Harmonic Resonance</span>
+          </button>
+          <button type="button" class="phase-pill" data-phase="4" data-target="0.88">
+            <span class="phase-index">05</span>
+            <span class="phase-name">Slow-Mo Dispersal</span>
+          </button>
+        </div>
+
+        <div class="scrubber-row">
+          <button
+            id="play-pause-btn"
+            class="transport-btn"
+            type="button"
+            aria-label="Pause or resume timeline"
+            title="Play/Pause (Shortcut: Space)"
+          >
+            PAUSE
+          </button>
+          <button
+            id="phase-lock-btn"
+            class="transport-btn"
+            type="button"
+            aria-pressed="false"
+            title="Lock current coalescence phase while waves and particles continue flowing (Shortcut: L)"
+          >
+            LOCK PHASE
+          </button>
+          <div class="slider-wrap timeline-slider-wrap">
+            <label for="timeline-slider" class="sr-only">Cycle Timeline Phase</label>
+            <input
+              id="timeline-slider"
+              type="range"
+              min="0"
+              max="1"
+              step="0.0005"
+              value="0.64"
+            />
+          </div>
+          <output id="timeline-readout" class="numeric-readout" for="timeline-slider">0.640</output>
+        </div>
+      </section>
+
+      <!-- Bottom Grid: Camera Rig Presets & Macro Optical Sliders -->
+      <section class="hud-controls-grid" aria-label="Camera and Optical Controls">
+        <div class="camera-group">
+          <div class="group-label">CAMERA RIG PRESETS (CLICK SCENE TO RACK FOCUS)</div>
+          <div class="camera-pills">
+            <button type="button" class="cam-pill active" data-cam="macro-rim">
+              Macro Grazing Rim
+            </button>
+            <button type="button" class="cam-pill" data-cam="torus-eye">
+              Torus Eye Interior
+            </button>
+            <button type="button" class="cam-pill" data-cam="villarceau-oblique">
+              Villarceau Oblique
+            </button>
+            <button type="button" class="cam-pill" data-cam="wide-void">
+              Wide Void Orbit
+            </button>
+          </div>
+        </div>
+
+        <div class="sliders-group">
+          <div class="control-item">
+            <div class="control-header">
+              <label for="speed-slider">SLOW-MO TIME SCALE</label>
+              <output id="speed-readout" class="numeric-readout" for="speed-slider">0.25x</output>
+            </div>
+            <input id="speed-slider" type="range" min="0.05" max="2.0" step="0.01" value="0.25" />
+          </div>
+
+          <div class="control-item">
+            <div class="control-header">
+              <label for="aperture-slider">MACRO APERTURE</label>
+              <output id="aperture-readout" class="numeric-readout" for="aperture-slider">f/1.4</output>
+            </div>
+            <input id="aperture-slider" type="range" min="1.2" max="16.0" step="0.1" value="1.4" />
+          </div>
+
+          <div class="control-item">
+            <div class="control-header">
+              <label for="focus-slider">FOCAL DISTANCE</label>
+              <output id="focus-readout" class="numeric-readout" for="focus-slider">4.35m</output>
+            </div>
+            <input id="focus-slider" type="range" min="1.2" max="12.0" step="0.05" value="4.35" />
+          </div>
+
+          <div class="control-item">
+            <div class="control-header">
+              <label for="pulse-slider">WAVE PULSE TEMPO</label>
+              <output id="pulse-readout" class="numeric-readout" for="pulse-slider">1.00x</output>
+            </div>
+            <input id="pulse-slider" type="range" min="0.2" max="2.5" step="0.05" value="1.00" />
+          </div>
+        </div>
+      </section>
+    </aside>
+  </main>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
